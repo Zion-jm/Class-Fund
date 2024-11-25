@@ -13,9 +13,9 @@ if(isset($_POST['delete'])) {
         $file = 'expenses';
     }
 
-    $id = $_POST['id'];
+    $delete_id = $_POST['delete_id'];
 
-    $sql = "DELETE FROM $file WHERE id = '$id'";
+    $sql = "DELETE FROM $file WHERE id = '$delete_id'";
     $conn->query($sql);
     if($conn->affected_rows > 0) {
         $redirectUrl = $_SERVER['HTTP_REFERER'] ?? 'default_page.php';
@@ -29,13 +29,5 @@ if(isset($_POST['delete'])) {
 
     $conn->close();
 }
-echo "  <form action='delete.php' method='post' id='add'>
-            <h2>Delete</h2>
-            <input type='text' name='id' placeholder='Enter Id of the Data you want to Delete' required class='input'><br>
-            <div>
-                <input type='submit' name='delete' value='Delete' class='submit'>
-                <input type='button' value='Cancel' class='submit' onclick='window.location.href=window.location.href;'>
-            </div>
-        </form>";
 ?>
 

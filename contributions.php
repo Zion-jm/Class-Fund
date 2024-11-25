@@ -12,6 +12,30 @@ if($sum->num_rows > 0) {
 } else {
     $totalAmount = 0;
 }
+
+$update_row = null;
+if(isset($_POST['update'])) {
+    include "dbcon.php";
+
+    $file = '';
+    if ($_SERVER['HTTP_REFERER'] === 'http://localhost/Class%20Fund/contributions.php') {
+        $file = 'contribution';
+    } elseif ($_SERVER['HTTP_REFERER'] === 'http://localhost/Class%20Fund/fines.php') {
+        $file = 'fines';
+    } elseif ($_SERVER['HTTP_REFERER'] === 'http://localhost/Class%20Fund/class_funds.php') {
+        $file = 'fund';
+    } elseif ($_SERVER['HTTP_REFERER'] === 'http://localhost/Class%20Fund/expenses.php') {
+        $file = 'expenses';
+    }
+
+    $update_id = $_POST['update_id'];
+
+    $update_sql = "SELECT * FROM $file WHERE id = '$update_id'";
+    $update_result = $conn->query($update_sql);
+    if($update_result->num_rows > 0) {
+        $update_row = $update_result->fetch_assoc();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +71,7 @@ if($sum->num_rows > 0) {
         window.history.replaceState({}, document.title, url.toString());
     }, 3000); 
     </script>
+
     <header>
         <h1>BSIT 2 - 1 Class Fund Management System</h1>
     </header>
@@ -75,6 +100,13 @@ if($sum->num_rows > 0) {
                                     <th class='name'>Name</th>
                                     <th class='desc'>Description</th>
                                     <th class='amount'>Amount</th>
+                                    <th class='add_button_container'>
+                                        <div>
+                                            <button class='add_button' onclick='addForm()'>
+                                                <i class='fas fa-plus'></i>
+                                            </button>
+                                        </div>
+                                    </th>
                                 </tr>";
                     while($row = $result->fetch_assoc()) {
                         echo "  <tr>
@@ -83,58 +115,35 @@ if($sum->num_rows > 0) {
                                     <td class='name'>" . htmlspecialchars($row['name']) . "</td>
                                     <td class='desc'>" . htmlspecialchars($row['description']) . "</td>
                                     <td class='amount'>&#8369; " . htmlspecialchars($row['amount']) . "</td>
+                                    <td class='icon_container'>
+                                        <form action='" . htmlspecialchars($_SERVER['PHP_SELF']) . "' method='post' style='display:inline;'>
+                                            <input type='hidden' name='update_id' value='" . htmlspecialchars($row['id']) . "'>
+                                            <button type='submit' name='update' class='delete-btn' title='Update'>&#9998;</button>
+                                        </form>
+                                        <form action='delete.php' method='post' style='display:inline;'>
+                                            <input type='hidden' name='delete_id' value='" . htmlspecialchars($row['id']) . "'>
+                                            <button type='submit' name='delete' class='delete-btn' title='Delete'>&#10060;</button>
+                                        </form>
+                                    </td>
                                 </tr>";
                     }
                     echo "      <tr>
-                                    <td colspan='4'>Total Contribution: </td>
+                                    <td colspan='5'>Total Contribution: </td>
                                     <td class='amount'>&#8369; " . htmlspecialchars($totalAmount) . "</td>
                                 </tr>
                             </table>";
+                            if(isset($update_row)) {
+                                include "update.php";
+                            }
+                            
                 } else {
                     echo "<p>No Result Found.</p>";
                 }
                 $conn->close();
             ?>
-        </div>
-
-        <div class="nav_operations">
-            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
-                <button type="submit" name="choice" value="1">Add</button>
-                <button type="submit" name="choice" value="2">Update</button>
-                <button type="submit" name="choice" value="3">Delete</button>
-                <button type="submit" name="choice" value="4">Filter</button>
-            </form>
-
-            <?php
-                $choice = $_POST['choice'] ?? null;
-                if($choice) {
-                    switch($choice) {
-                        case '1': 
-                            include "add.php";
-                            break;
-
-                        case '2':
-                            include "update.php";
-                            break;
-
-                        case '3':
-                            include "delete.php";
-                            break;
-
-                        case '4':
-                            echo "  <form action='" . htmlspecialchars($_SERVER['PHP_SELF']) . "' method='post' id='add'>
-                                        <h2>Filter</h2>
-                                        <input type='text' name='data' placeholder='Enter Data to Filter' required class='input'><br>
-                                        <div>
-                                            <input type='submit' name='filter' value='Filter' class='submit'>
-                                            <input type='button' value='Cancel' class='submit' onclick='window.location.href=window.location.href;'>
-                                        </div>
-                                        </form>";
-                            break;
-                    }
-                }
-                include "filter.php";
-            ?>
+            <div id='add_form_container'>
+                <?php include "add.php" ?>
+            </div>
         </div>
     </main>
 
@@ -142,4 +151,17 @@ if($sum->num_rows > 0) {
         Class Fund Management System
     </footer>
 </body>
+<script>
+    function setOverlayHeight(varname) {
+        const overlay = document.getElementById(varname);
+        overlay.style.height = `${document.documentElement.scrollHeight}px`;
+    }
+    setOverlayHeight("update_back");
+    setOverlayHeight("add_back");
+    window.addEventListener("resize", setOverlayHeight);
+
+    function addForm() {
+        document.getElementById('add_form_container').style.display = 'block';
+    }
+</script>
 </html>

@@ -27,7 +27,8 @@ if($conn->query($sql)) {
 }
     $conn->close();
 }
-echo "  <form action='add.php' method='post' id='add'>
+echo "  <div class='add_back' id='add_back'>
+        <form action='add.php' method='post' class='add_form'>
             <h2>Add</h2>
             <label for='name'>Name:</label><br>
             <input type='text' name='name' placeholder='Enter Name' required class='input'><br>

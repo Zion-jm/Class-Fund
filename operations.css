@@ -1,29 +1,15 @@
-.nav_operations {
-    margin-top: 20px;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
+.update_back {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 100%;
+    top: 0;
+    left: 0;
 }
 
-.nav_operations form {
-    display: flex;
-    justify-content: center;
-}
-
-.nav_operations form button {
-    width: 80px;
-    padding: 5px 0;
-    margin: 15px;
-    border-radius: 5px;
-}
-
-.nav_operations form button:hover {
-    background-color: gray;
-    color: white;
-    cursor: pointer;
-}
-
-#add {
-    display: block;
+.update_form {
+    position: absolute;
+    top: 250px;
+    left: 40%;
     padding: 20px;
     max-width: 300px;
     margin: 10px auto;
@@ -32,28 +18,76 @@
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-#add h2 {
+.update_form h2 {
     text-align: center;
     margin-bottom: 10px;
     border-bottom: 1px solid black;
 }
 
-#add label {
+.update_form label {
     display: block;
     margin: 5px 0 -15px 0;
 }
 
-#add .input {
+.update_form .input {
     padding: 5px 2px;
     width: 293px;
 }
 
-#add div {
+.update_form div {
     display: flex;
     justify-content: space-around;
 }
 
-#add .submit {
+.update_form .submit {
+    display: block;
+    width: 70px;
+    padding: 2px;
+    margin-top: 10px;
+}
+
+.add_back {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+.add_form {
+    position: absolute;
+    top: 250px;
+    left: 40%;
+    padding: 20px;
+    max-width: 300px;
+    margin: 10px auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.add_form h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;
+}
+
+.add_form label {
+    display: block;
+    margin: 5px 0 -15px 0;
+}
+
+.add_form .input {
+    padding: 5px 2px;
+    width: 293px;
+}
+
+.add_form div {
+    display: flex;
+    justify-content: space-around;
+}
+
+.add_form .submit {
     display: block;
     width: 70px;
     padding: 2px;

@@ -1,5 +1,5 @@
 <?php
-if(isset($_POST['update'])) {
+if(isset($_POST['update_form'])) {
     include "dbcon.php";
 
     $file = '';
@@ -13,14 +13,15 @@ if(isset($_POST['update'])) {
         $file = 'expenses';
     }
 
-    $id = $_POST['id'];
+    $update_id = $_POST['update_id'];
     $name = $_POST['name'];
     $desc = $_POST['description'];
     $amount = (int)$_POST['amount'];
 
     $sql = "UPDATE $file SET name = '$name', description = '$desc', amount = $amount
-            WHERE id = '$id'";
+            WHERE id = '$update_id'";
     $conn->query($sql);
+
     if($conn->affected_rows > 0) {
         $redirectUrl = $_SERVER['HTTP_REFERER'] ?? 'default_page.php';
         header("Location: $redirectUrl?message=updated");
@@ -32,18 +33,20 @@ if(isset($_POST['update'])) {
     }
     $conn->close();
 }
-echo "  <form action='update.php' method='post' id='add'>
+echo "  <div class='update_back' id='update_back'>
+        <form action='update.php' method='post' class='update_form'>
             <h2>Update</h2>
-            <input type='text' name='id' placeholder='Enter Id of the Data you want to Update' required class='input'><br>
             <label for='name'>Name:</label><br>
-            <input type='text' name='name' placeholder='Enter Name' required class='input'><br>
+            <input type='hidden' name='update_id' value='" . htmlspecialchars($update_row['id']) . "'>
+            <input type='text' name='name' placeholder='Enter Name' value='" . htmlspecialchars($update_row['name']) . "' required class='input'><br>
             <label for='description'>Description:</label><br>
-            <input type='text' name='description' placeholder='Enter Description' required class='input'><br>
+            <input type='text' name='description' placeholder='Enter Description' value='" . htmlspecialchars($update_row['description']) . "' required class='input'><br>
             <label for='amount'>Amount:</label><br>
-            <input type='text' name='amount' placeholder='Enter Amount' required class='input'><br>
+            <input type='text' name='amount' placeholder='Enter Amount' value='" . htmlspecialchars($update_row['amount']) . "' required class='input'><br>
             <div>
-                <input type='submit' name='update' value='Update' class='submit'>
+                <input type='submit' name='update_form' value='Update' class='submit'>
                 <input type='button' value='Cancel' class='submit' onclick='window.location.href=window.location.href;'>
             </div>
-        </form>";
+        </form>
+        </div>";
 ?>
